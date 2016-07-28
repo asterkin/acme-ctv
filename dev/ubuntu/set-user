@@ -11,6 +11,9 @@ fi
 
 sudo adduser --gecos "$2" $1
 sudo sed -e "\$a$1 ALL=(ALL) ALL" -i /etc/sudoers
+su $1
+sudo echo sh -c "echo $1-vb >/etc/hostname"
+sudo sed "s/administrator-VirtualBox/$1-vb/" -i /etc/hosts
 sudo usermod -aG docker $USER
 git config --global --add user.name "$2"
 git config --global --add user.email "$1@$3.com"
@@ -20,33 +23,5 @@ cd
 mkdir golang
 mkdir golang/src
 echo "export GOPATH=/home/$USER/golang" >>.bashrc
-
-
-
-cd  
-sudo sed "s/localhost/localhost `hostname`/" -i /etc/hosts 
-
-sudo gpasswd -a $1 docker
-sudo gpasswd -a $1 plugdev #is it really required?
-sudo gpasswd -a $1 netdev
-sudo cp -r .ssh /home/$1
-sudo chown $1:$1 /home/$1/.ssh
-sudo chown $1:$1 /home/$1/.ssh/authorized_keys
-sudo cp ./.Xauthority /home/$1
-sudo chown $1:$1 /home/$1/.Xauthority
-
-if [[ "$3" == ?*@?* ]] ; then
- email=$3 
-else if [[ "$1" == ?*.com ]] ; then
- email="$1@$3" 
-else
- email="$1@$3.com" 
-fi
-fi
-
-git config --global --add user.name "$2"
-git config --global --add user.email "$email"
-
-sudo cp .gitconfig /home/$1
-sudo chown $1:$1 /home/$1/.gitconfig
+echo "export GOPATH=/home/$USER/golang" >>.profile
 
