@@ -11,6 +11,6 @@ fi
 
 sudo adduser --gecos "$2" $1
 sudo sed -e "\$a$1 ALL=(ALL) ALL" -i /etc/sudoers
-sudo -H -u $1 bash -c "config-user $1"
+sudo -H -u $1 bash -c "config-user $3"
 
 
