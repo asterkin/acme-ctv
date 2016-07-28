@@ -4,29 +4,13 @@
 #Usage:  set-user username "Full Name" e-mail
 #Pre-requisites: git and docker installed 
 
-if [ "$#" -ne 2 ]; then
-    echo "Usage: set-user username \"Full Name\"" e-mail
+if [ "$#" -ne 3]; then
+    echo "Usage: set-user username \"Full Name\" email"
     exit 1 
 fi
 
 sudo adduser --gecos "$2" $1
 sudo sed -e "\$a$1 ALL=(ALL) ALL" -i /etc/sudoers
-login $1
-sudo "$USER-vb" > /etc/hostname
-sudo usermod -aG docker $USER
-NAME=`getent passwd $USER | cut -d ':' -f 5 | cut -d ',' -f 1`
-EMAIL=$1@cisco.com
-git config --global --add user.name "$NAME"
-git config --global --add user.email "$EMAIL"
-git config --global --list
-
-cd
-mkdir -p golang/src
-echo "export GOPATH=/home/$USER/golang" >>.bashrc
-echo "export GOPATH=/home/$USER/golang" >>.profile
-
-echo 'PS1="\[\033[01;34m\]\w\[\033[00m\]\$ "' >>.bashrc
-
-echo "Restart manually and run del-admin"
+sudo -H -u $1 bash -c "config-user $1"
 
 

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+sudo shell -c "echo $USER-vb > /etc/hostname"
+sudo usermod -aG docker $USER
+NAME=`getent passwd $USER | cut -d ':' -f 5 | cut -d ',' -f 1`
+EMAIL=$USER@$1.com
+git config --global --add user.name "$NAME"
+git config --global --add user.email "$EMAIL"
+git config --global --list
+
+cd
+mkdir -p golang/src
+echo "export GOPATH=/home/$USER/golang" >>.bashrc
+echo "export GOPATH=/home/$USER/golang" >>.profile
+
+echo 'PS1="\[\033[01;34m\]\w\[\033[00m\]\$ "' >>.bashrc
+sudo reboot
+
