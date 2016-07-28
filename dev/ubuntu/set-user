@@ -11,7 +11,7 @@ fi
 
 sudo adduser --gecos "$2" $1
 sudo sed -e "\$a$1 ALL=(ALL) ALL" -i /etc/sudoers
-su $1
+sudo login $1
 sudo echo sh -c "echo $1-vb >/etc/hostname"
 sudo sed "s/administrator-VirtualBox/$1-vb/" -i /etc/hosts
 sudo usermod -aG docker $USER
