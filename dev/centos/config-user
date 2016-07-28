@@ -14,8 +14,10 @@ cd
 mkdir -p golang/src
 echo "export GOPATH=/home/$USER/golang" >>.bashrc
 echo "export GOPATH=/home/$USER/golang" >>.profile
-echo "export GOROOT=/usr/lib/go" >>.bashrc
-echo "export GOROOT=/usr/lib/go" >>.profile
+echo "export GOROOT=/usr/lib/golang" >>.bashrc
+echo "export GOROOT=/usr/lib/golang" >>.profile
+echo "export IBUS_ENABLE_SYNC_MODE=1" >>.bashrc
+echo "export IBUS_ENABLE_SYNC_MODE=1" >>.profile
 
 echo 'PS1="\[\033[01;34m\]\w\[\033[00m\]\$ "' >>.bashrc
 sudo reboot
