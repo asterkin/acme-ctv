@@ -12,6 +12,7 @@ fi
 sudo adduser --gecos "$2" $1
 sudo sed -e "\$a$1 ALL=(ALL) ALL" -i /etc/sudoers
 login $1
+sudo "$USER-vb" > /etc/hostname
 sudo usermod -aG docker $USER
 NAME=`getent passwd $USER | cut -d ':' -f 5 | cut -d ',' -f 1`
 EMAIL=$1@cisco.com
