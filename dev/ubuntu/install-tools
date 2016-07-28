@@ -1,0 +1,9 @@
+#!/bin/bash
+
+sudo apt-get update -y
+sudo apt-get install -y g++
+sudo apt-get install -y golang
+./install-docker
+./install-inellij
+sudo cp set-user /usr/bin
+
