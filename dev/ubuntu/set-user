@@ -4,7 +4,7 @@
 #Usage:  set-user username "Full Name" e-mail
 #Pre-requisites: git and docker installed 
 
-if [ "$#" -ne 3]; then
+if [ "$#" -ne 3 ]; then
     echo "Usage: set-user username \"Full Name\" email"
     exit 1 
 fi
