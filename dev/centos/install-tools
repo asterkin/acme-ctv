@@ -1,0 +1,12 @@
+#!/bin/bash
+
+sudo yum update -y
+sudo yum install -y gedit
+sudo yum install -y golang
+sudo yum install -y x2goclient
+./install-docker
+./install-intellij
+sudo cp set-user /usr/bin
+sudo cp config-user /usr/bin
+sudo cp del-admin /usr/bin
+

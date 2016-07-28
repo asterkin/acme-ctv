@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#Configure a proper user
+#Usage:  set-user username "Full Name" e-mail
+#Pre-requisites: git and docker installed 
+
+if [ "$#" -ne 3 ]; then
+    echo "Usage: set-user username \"Full Name\" email"
+    exit 1 
+fi
+
+sudo adduser -m -c "$2" $1
+sudo passwd $1
+sudo sed -e "\$a$1 ALL=(ALL) ALL" -i /etc/sudoers
+sudo -H -u $1 bash -c "config-user $3"
+
+

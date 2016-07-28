@@ -1,0 +1,6 @@
+#!/bin/bash
+
+#delete administrator user
+sudo deluser administrator
+sudo rm -fR /home/administrator/
+
