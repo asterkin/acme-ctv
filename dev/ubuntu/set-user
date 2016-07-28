@@ -20,8 +20,7 @@ git config --global --add user.email "$1@$3.com"
 git config --global --list
 
 cd
-mkdir golang
-mkdir golang/src
+mkdir -p golang/src
 echo "export GOPATH=/home/$USER/golang" >>.bashrc
 echo "export GOPATH=/home/$USER/golang" >>.profile
 
