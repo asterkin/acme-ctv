@@ -5,6 +5,6 @@ sudo apt-get install -y curl
 sudo apt-get install -y g++
 sudo apt-get install -y golang
 ./install-docker
-./install-inellij
+./install-intellij
 sudo cp set-user /usr/bin
 
