@@ -24,3 +24,8 @@ mkdir -p golang/src
 echo "export GOPATH=/home/$USER/golang" >>.bashrc
 echo "export GOPATH=/home/$USER/golang" >>.profile
 
+sudo deluser administrator
+sudo rm -fR /home/administrator/
+sudo reboot
+
+
