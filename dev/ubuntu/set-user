@@ -26,6 +26,6 @@ echo "export GOPATH=/home/$USER/golang" >>.profile
 
 sudo deluser administrator
 sudo rm -fR /home/administrator/
-sudo reboot
+echo "Shutdown and restart manually"
 
 
