@@ -3,8 +3,11 @@
 sudo usermod -aG docker $USER
 NAME=`getent passwd $USER | cut -d ':' -f 5 | cut -d ',' -f 1`
 EMAIL=$USER@$1.com
-git config --global --add user.name "$NAME"
-git config --global --add user.email "$EMAIL"
+sudo cat >/home/$USER/.gitconfig <<EOF
+[user]
+	name = $NAME
+	email = $EMAIL
+EOF
 git config --global --list
 
 cd
