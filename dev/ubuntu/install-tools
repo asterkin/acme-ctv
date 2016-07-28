@@ -7,5 +7,6 @@ sudo apt-get install -y golang
 ./install-docker
 ./install-intellij
 sudo cp set-user /usr/bin
+sudo cp config-user /usr/bin
 sudo cp del-admin /usr/bin
 
