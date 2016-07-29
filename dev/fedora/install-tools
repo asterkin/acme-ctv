@@ -5,6 +5,7 @@ sudo dnf install -y gcc-c++
 sudo dnf install -y golang
 sudo dnf install -y python
 sudo dnf install -y gnome-tweak-tool
+sudo dnf install -y x2goclient
 sudo cp config-tools /usr/bin
 
 ./install-docker
