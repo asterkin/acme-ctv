@@ -4,9 +4,8 @@ sudo apt-get update -y
 sudo apt-get install -y curl
 sudo apt-get install -y g++
 sudo apt-get install -y golang
+sudo apt-get install -y x2goclient
+sudo cp config-tools /usr/bin
 ./install-docker
 ./install-intellij
-sudo cp set-user /usr/bin
-sudo cp config-user /usr/bin
-sudo cp del-admin /usr/bin
 
