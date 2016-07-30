@@ -1,0 +1,8 @@
+#!/bin/bash
+
+NAME=`getent passwd $USER | cut -d ':' -f 5 | cut -d ',' -f 1`
+EMAIL=$USER@$1.com
+git config --global --add user.name "$NAME"
+git config --global --add user.email "$EMAIL"
+git config --global --list
+
