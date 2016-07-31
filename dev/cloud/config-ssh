@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cat >~/.ssh/config <<EOF
+Host *
+     	ForwardAgent yes
+	StrictHostKeyChecking no
+	UserKnownHostsFile=/dev/null
+EOF
+chmod 600 ~/.ssh/config
+

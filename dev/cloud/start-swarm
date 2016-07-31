@@ -1,0 +1,31 @@
+#!/bin/bash
+
+export BASTION=$1
+export KEY_FILE=~/Downloads/cloud-user.pem
+export MASTER=$2
+export SLAVE1=$3
+export SLAVE2=$4
+export SLAVE3=$5
+
+ssh-agent /bin/sh >/tmp/out <<EOF
+ssh-add $KEY_FILE
+ssh -A -t cloud-user@$BASTION ssh -t cloud-user@$MASTER docker swarm init --advertise-addr $MASTER 
+EOF
+cat /tmp/out
+JOIN=`grep -A 4 "To add a worker" /tmp/out | tail -4 | tr -d '\\' | tr -d '\n'`
+echo $JOIN
+ssh-agent /bin/sh >/tmp/out <<EOF
+ssh-add $KEY_FILE
+ssh -A -t cloud-user@$BASTION ssh -t cloud-user@$SLAVE1 $JOIN 
+EOF
+ssh-agent /bin/sh >/tmp/out <<EOF
+ssh-add $KEY_FILE
+ssh -A -t cloud-user@$BASTION ssh -t cloud-user@$SLAVE2 $JOIN 
+EOF
+ssh-agent /bin/sh >/tmp/out <<EOF
+ssh-add $KEY_FILE
+ssh -A -t cloud-user@$BASTION ssh -t cloud-user@$SLAVE3 $JOIN 
+EOF
+
+#TODO: make it intelligent
+
