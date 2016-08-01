@@ -1,0 +1,37 @@
+#!/bin/bash
+
+KEY_FILE=$1.pem
+BASTION=$2
+
+rm ~/.ssh/*
+cp ~/Downloads/$KEY_FILE ~/.ssh
+#TODO: loop over nodes
+cat >~/.ssh/config <<EOF
+Host $BASTION
+	ForwardAgent yes
+	StrictHostKeyChecking no
+	UserKnownHostsFile=/dev/null
+	IdentityFile ~/.ssh/$KEY_FILE
+Host $3
+	StrictHostKeyChecking no
+	UserKnownHostsFile=/dev/null
+	IdentityFile ~/.ssh/$KEY_FILE
+	ProxyCommand ssh cloud-user@$BASTION -W %h:%p
+Host $4
+	StrictHostKeyChecking no
+	UserKnownHostsFile=/dev/null
+	IdentityFile ~/.ssh/$KEY_FILE
+	ProxyCommand ssh cloud-user@$BASTION -W %h:%p
+Host $5
+	StrictHostKeyChecking no
+	UserKnownHostsFile=/dev/null
+	IdentityFile ~/.ssh/$KEY_FILE
+	ProxyCommand ssh cloud-user@$BASTION -W %h:%p
+Host $6
+	StrictHostKeyChecking no
+	UserKnownHostsFile=/dev/null
+	IdentityFile ~/.ssh/$KEY_FILE
+	ProxyCommand ssh cloud-user@$BASTION -W %h:%p
+EOF
+chmod 600 ~/.ssh/*
+

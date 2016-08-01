@@ -1,39 +1,17 @@
 #!/bin/bash
 
-export KEY_FILE=~/Downloads/cloud-user.pem
-#TODO: make loop
-export BASTION=$1
-export MASTER=$2
-export SLAVE1=$3
-export SLAVE2=$4
-export SLAVE3=$5
+export MASTER=$1
+export SLAVE1=$2
+export SLAVE2=$3
+export SLAVE3=$4
 
-rm ~/.ssh/*
-cat >~/.ssh/config <<EOF
-Host *
-     	ForwardAgent yes
-	StrictHostKeyChecking no
-	UserKnownHostsFile=/dev/null
-EOF
-chmod 600 ~/.ssh/config
-
-ssh-add $KEY_FILE
-
-ssh cloud-user@$BASTION "bash -s" <<EOF
-echo "Host *" >~/.ssh/config
-echo "	ForwardAgent yes" >>~/.ssh/config 
-echo "	StrictHostKeyChecking no" >>~/.ssh/config 
-echo "	UserKnownHostsFile=/dev/null" >>~/.ssh/config 
-chmod 600 ~/.ssh/config
-EOF
-
-ssh -t cloud-user@$BASTION docker swarm init --advertise-addr $MASTER > /tmp/out
+ssh -t cloud-user@$MASTER docker swarm init --advertise-addr $MASTER > /tmp/out
 cat /tmp/out
 JOIN=`grep -A 4 "To add a worker" /tmp/out | tail -4 | tr -d '\\' | tr -s ' ' | tr -d '\r' | tr -d '\n'`
 echo $JOIN
-ssh -A -t cloud-user@$BASTION ssh -t cloud-user@$SLAVE1 $JOIN 
-ssh -A -t cloud-user@$BASTION ssh -t cloud-user@$SLAVE2 $JOIN 
-ssh -A -t cloud-user@$BASTION ssh -t cloud-user@$SLAVE3 $JOIN 
-ssh -t cloud-user@$BASTION docker node ls
+ssh -t cloud-user@$SLAVE1 $JOIN 
+ssh -t cloud-user@$SLAVE2 $JOIN 
+ssh -t cloud-user@$SLAVE3 $JOIN 
+ssh -t cloud-user@$MASTER docker node ls
 
 
