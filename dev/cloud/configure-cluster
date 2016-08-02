@@ -1,7 +1,11 @@
 #!/bin/bash
 
 KEY_FILE=$1.pem
-BASTION=$2
+export BASTION=$2
+export MASTER=$3
+export SLAVE1=$4
+export SLAVE2=$5
+export SLAVE3=$6
 
 rm ~/.ssh/*
 cp ~/Downloads/$KEY_FILE ~/.ssh
@@ -12,26 +16,26 @@ Host $BASTION
 	StrictHostKeyChecking no
 	UserKnownHostsFile=/dev/null
 	IdentityFile ~/.ssh/$KEY_FILE
-Host $3
+Host $MASTER
 	StrictHostKeyChecking no
 	UserKnownHostsFile=/dev/null
 	IdentityFile ~/.ssh/$KEY_FILE
-	ProxyCommand ssh cloud-user@$BASTION -W %h:%p
-Host $4
+	ProxyCommand ssh -q cloud-user@$BASTION -W %h:%p
+Host $SLAVE1
 	StrictHostKeyChecking no
 	UserKnownHostsFile=/dev/null
 	IdentityFile ~/.ssh/$KEY_FILE
-	ProxyCommand ssh cloud-user@$BASTION -W %h:%p
-Host $5
+	ProxyCommand ssh -q cloud-user@$BASTION -W %h:%p
+Host $SLAVE2
 	StrictHostKeyChecking no
 	UserKnownHostsFile=/dev/null
 	IdentityFile ~/.ssh/$KEY_FILE
-	ProxyCommand ssh cloud-user@$BASTION -W %h:%p
-Host $6
+	ProxyCommand ssh -q cloud-user@$BASTION -W %h:%p
+Host $SLAVE3
 	StrictHostKeyChecking no
 	UserKnownHostsFile=/dev/null
 	IdentityFile ~/.ssh/$KEY_FILE
-	ProxyCommand ssh cloud-user@$BASTION -W %h:%p
+	ProxyCommand ssh -q cloud-user@$BASTION -W %h:%p
 EOF
 chmod 600 ~/.ssh/*
 
