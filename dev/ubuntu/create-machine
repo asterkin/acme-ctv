@@ -1,0 +1,24 @@
+#!/bin/bash
+
+docker-machine -D create -d generic \
+--generic-ssh-user cloud-user \
+--generic-ip-address $2 \
+$1-master
+
+docker-machine -D create -d generic \
+--generic-ssh-user cloud-user \
+--generic-ip-address $3 \
+$1-slave1
+
+docker-machine -D create -d generic \
+--generic-ssh-user cloud-user \
+--generic-ip-address $4 \
+$1-slave2
+
+docker-machine -D create -d generic \
+--generic-ssh-user cloud-user \
+--generic-ip-address $5 \
+$1-slave3
+
+docker-machine ls
+
