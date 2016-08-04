@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sudo yum update -y
 sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
 [dockerrepo]
 name=Docker Repository
@@ -11,4 +12,7 @@ EOF
 sudo yum -y install docker-engine
 sudo service docker start
 sudo chkconfig docker on
+sudo usermod -aG docker $USER
+docker --version
+
 

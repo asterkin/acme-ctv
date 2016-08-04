@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ssh-agent
+Type=Application
+Icon=/usr/share/icons/hicolor/48x48/apps/ssh-logo.png
+Exec=gnome-terminal --command 'ssh-agent sh'
+Comment=Terminal with SSH Agent Running
+NoDisplay=false
+Categories=GTK;GNOME;Utility;
+Name[en]=SSH Agent Terminal
