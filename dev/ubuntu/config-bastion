@@ -1,0 +1,17 @@
+#!/bin/bash
+
+KEY_FILE=$1.pem
+export BASTION=$2
+
+rm ~/.ssh/*
+cp ~/Downloads/$KEY_FILE ~/.ssh
+cat >~/.ssh/config <<EOF
+Host $BASTION
+	ForwardAgent yes
+	StrictHostKeyChecking no
+	UserKnownHostsFile=/dev/null
+	IdentityFile ~/.ssh/$KEY_FILE
+EOF
+chmod 600 ~/.ssh/*
+cat ./install-docker ./install-machine | ssh cloud-user@$BASTION "bash -s"
+
