@@ -1,0 +1,9 @@
+#!/bin/bash
+
+curl "$BASTION:8080/v1/docker-flow-proxy/remove?serviceName=go-demo"
+ssh -q cloud-user@$BASTION "bash -s"<<EOF
+docker service rm go-demo
+docker service rm go-demo-db
+docker network rm go-demo
+EOF
+

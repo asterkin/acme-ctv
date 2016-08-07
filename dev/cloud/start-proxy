@@ -1,13 +1,16 @@
 #!/bin/bash
 
-LEADER=`docker node ls | grep Leader | cut -d ' ' -f1`
+LEADER=`ssh -q cloud-user@$BASTION docker node ls | grep Leader | cut -d ' ' -f1`
+ssh -q cloud-user@$BASTION "bash -s" <<EOF
 docker network create --driver overlay proxy
 docker service create --name proxy       \
 	-p 80:80                         \
 	-p 443:443                       \
+	-p 8080:8080			 \
 	--network proxy                  \
 	--constraint node.id=="$LEADER"  \
 	-e MODE=swarm                    \
 	vfarcic/docker-flow-proxy
 docker service ls
+EOF
 

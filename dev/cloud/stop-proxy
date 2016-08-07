@@ -1,0 +1,7 @@
+#!/bin/bash
+
+ssh -q cloud-user@$BASTION "bash -s"<<EOF
+docker service rm proxy
+docker network rm proxy
+EOF
+

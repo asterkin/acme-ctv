@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ssh -q cloud-user@$BASTION docker service ls
+

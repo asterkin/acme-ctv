@@ -1,0 +1,19 @@
+#!/bin/bash
+
+ssh -q cloud-user@$BASTION "bash -s"<<EOF
+docker network create --driver overlay go-demo
+docker service create --name go-demo-db \
+	--network go-demo \
+	mongo
+docker service create --name go-demo \
+	-p 8080          \
+	-e DB=go-demo-db \
+	--network go-demo \
+	--network proxy \
+	vfarcic/go-demo
+echo Wait until go-demo service starts and invoke .register-go-demo
+#TODO: find a way to automate it
+#curl "$BASTION:8080/v1/docker-flow-proxy/reconfigure?serviceName=go-demo&servicePath=/demo&port=8080"
+docker service ls
+EOF
+

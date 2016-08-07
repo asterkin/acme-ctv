@@ -4,7 +4,7 @@ KEY_FILE=$1.pem
 export BASTION=$2
 MASTER=$3
 shift 3
-rm ~/.ssh/*
+rm -f ~/.ssh/*
 cat >~/.ssh/config <<EOF
 Host $BASTION
 	ForwardAgent yes

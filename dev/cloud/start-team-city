@@ -1,5 +1,0 @@
-#!/bin/bash
-
-ssh -t cloud-user@$MASTER docker service create --name teamcity-server-instance  \
-    -p 8111:8111 \
-    jetbrains/teamcity-server
