@@ -1,0 +1,40 @@
+#!/bin/bash
+
+KEY_FILE=$1.pem
+export BASTION=$2
+MASTER=$3
+shift 3
+rm ~/.ssh/*
+cat >~/.ssh/config <<EOF
+Host $BASTION
+	ForwardAgent yes
+	StrictHostKeyChecking no
+	UserKnownHostsFile=/dev/null
+	IdentityFile ~/.ssh/$KEY_FILE
+EOF
+for SLAVE in "$@";
+do
+  echo "Host $SLAVE" >> ~/.ssh/config
+  cat >>~/.ssh/config <<EOF
+	StrictHostKeyChecking no
+	UserKnownHostsFile=/dev/null
+	IdentityFile ~/.ssh/$KEY_FILE
+	ProxyCommand ssh -q cloud-user@$BASTION -W %h:%p	
+EOF
+done
+
+cp ~/Downloads/$KEY_FILE ~/.ssh
+chmod 600 ~/.ssh/*
+
+ssh -q cloud-user@$BASTION docker swarm init --advertise-addr $MASTER > /tmp/out
+JOIN=`grep -A 4 "To add a worker" /tmp/out | tail -4 | tr -d '\\\\' | tr -s ' ' | tr -d '\r' | tr -d '\n'`
+
+for SLAVE in "$@";
+do
+  ssh -q cloud-user@$SLAVE $JOIN	
+done
+
+ssh -q cloud-user@$BASTION docker node ls
+
+
+

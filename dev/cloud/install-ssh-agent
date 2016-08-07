@@ -1,5 +1,0 @@
-#!/bin/bash
-
-sudo cp ssh-agent.png /usr/share/icons/hicolor/48x48/apps/
-sudo cp ssh-agent.desktop /usr/share/applications
-

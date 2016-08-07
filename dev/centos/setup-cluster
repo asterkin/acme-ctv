@@ -1,5 +1,0 @@
-#!/bin/bash
-
-ssh -A cloud-user@$BASTION "bash -s $CLUSTER $1 $2 $3 $4" <./create-machine-and-swarm-cluster
-
-
