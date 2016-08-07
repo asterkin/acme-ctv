@@ -1,0 +1,30 @@
+#!/bin/bash
+
+export CLUSTER=$1
+export MASTER=$CLUSTER-master
+export SLAVE1=$CLUSTER-slave1
+export SLAVE2=$CLUSTER-slave2
+export SLAVE3=$CLUSTER-slave3
+
+docker-machine -D create -d generic --generic-ssh-user cloud-user --generic-ip-address $2 $MASTER
+eval $(docker-machine env $MASTER)
+docker swarm init --advertise-addr $(docker-machine ip $MASTER) > /tmp/out
+JOIN=`grep -A 4 "To add a worker" /tmp/out | tail -4 | tr -d '\\\\' | tr -s ' ' | tr -d '\r' | tr -d '\n'`
+echo $JOIN
+
+docker-machine create -d generic --generic-ssh-user cloud-user --generic-ip-address $3 $SLAVE1
+eval $(docker-machine env $SLAVE1)
+$JOIN
+
+docker-machine create -d generic --generic-ssh-user cloud-user --generic-ip-address $4 $SLAVE2
+eval $(docker-machine env $SLAVE2)
+$JOIN
+
+docker-machine create -d generic --generic-ssh-user cloud-user --generic-ip-address $5 $SLAVE3
+eval $(docker-machine env $SLAVE3)
+$JOIN
+
+eval (docker-machine env $MASTER)
+docker-machine ls
+docker node ls
+
