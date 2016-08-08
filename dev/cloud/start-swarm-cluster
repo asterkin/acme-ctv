@@ -1,6 +1,7 @@
 #!/bin/bash
 
-KEY_FILE=$1.pem
+CLUSTER=$1
+KEY_FILE=$CLUSTER.pem
 export BASTION=$2
 MASTER=$3
 shift 3
@@ -26,12 +27,17 @@ done
 cp ~/Downloads/$KEY_FILE ~/.ssh
 chmod 600 ~/.ssh/*
 
+ssh -q cloud-user@$BASTION "hostnamectl set-hostname $CLUSTER-master && sudo service docker restart"
 ssh -q cloud-user@$BASTION docker swarm init --advertise-addr $MASTER > /tmp/out
 JOIN=`grep -A 4 "To add a worker" /tmp/out | tail -4 | tr -d '\\\\' | tr -s ' ' | tr -d '\r' | tr -d '\n'`
 
+i=1
 for SLAVE in "$@";
 do
-  ssh -q cloud-user@$SLAVE $JOIN	
+  HOSTNAME=$(printf "%s-slave%d" $CLUSTER $i)
+  ssh -q cloud-user@$SLAVE "sudo hostnamectl set-hostname $HOSTNAME && sudo service docker restart"
+  ssh -q cloud-user@$SLAVE $JOIN
+  let i=$i+1	
 done
 
 ssh -q cloud-user@$BASTION docker node ls
