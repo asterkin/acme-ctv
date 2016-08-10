@@ -5,12 +5,16 @@ export REGISTRY_TAG=$REGISTRY:5000
 CERT_FILE=$REGISTRY.crt
 CERT_DIR=/etc/docker/certs.d/$REGISTRY_TAG
 
-ssh -q -A cloud-user@$BASTION "bash -s $MASTER $MASTER_HOST $REGISTRY $REGISTRY_TAG $CERT_FILE $CERT_DIR" <registry/start-master
+ssh -q -A cloud-user@$BASTION "bash -s $MASTER $MASTER_HOST $REGISTRY $REGISTRY_TAG $CERT_DIR $CERT_FILE" <master/start-registry
+scp -q cloud-user@$BASTION:~/$CERT_FILE .
 
 for SLAVE in "$@";
 do
-  ssh -q -A cloud-user@$SLAVE "bash -s $BASTION $MASTER $REGISTRY $CERT_DIR $CERT_FILE" <registry/config-slave
+  scp -q $CERT_FILE cloud-user@$SLAVE:~/
+  ssh -q -A cloud-user@$SLAVE "bash -s $BASTION $MASTER $REGISTRY $CERT_DIR $CERT_FILE" <slave/config-registry
 done
+rm $CERT_FILE
+
 
 
 

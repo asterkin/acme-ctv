@@ -6,7 +6,6 @@ REGISTRY=$3
 CERT_DIR=$4
 CERT_FILE=$5
 
-scp -q cloud-user@$BASTION:~/$CERT_FILE .
 sudo sh -c "echo \"$MASTER  $REGISTRY\" >>/etc/hosts"
 sudo mkdir -p $CERT_DIR
 sudo mv $CERT_FILE $CERT_DIR

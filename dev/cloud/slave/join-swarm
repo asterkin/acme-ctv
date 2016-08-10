@@ -1,0 +1,20 @@
+#!/bin/bash
+
+HOSTNAME=$1
+JOIN=$2
+shift 2
+
+whitespace="[[:space:]]"
+for arg in "$@";
+do
+  if [[ $arg =~ $whitespace ]]
+  then
+    arg=\"$arg\"
+  fi
+  JOIN="$JOIN $arg"
+done
+sudo hostnamectl set-hostname $HOSTNAME
+sudo service docker restart
+eval $JOIN
+
+
