@@ -1,0 +1,16 @@
+#!/bin/bash
+
+export REGISTRY=$CLUSTER-registry
+export REGISTRY_TAG=$REGISTRY:5000
+CERT_FILE=$REGISTRY.crt
+CERT_DIR=/etc/docker/certs.d/$REGISTRY_TAG
+
+ssh -q -A cloud-user@$BASTION "bash -s $MASTER $MASTER_HOST $REGISTRY $REGISTRY_TAG $CERT_FILE $CERT_DIR" <registry/start-master
+
+for SLAVE in "$@";
+do
+  ssh -q -A cloud-user@$SLAVE "bash -s $BASTION $MASTER $REGISTRY $CERT_DIR $CERT_FILE" <registry/config-slave
+done
+
+
+

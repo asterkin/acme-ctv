@@ -1,9 +1,0 @@
-#!/bin/bash
-
-ssh -q cloud-user@$BASTION "bash -s"<<EOF
-docker service create -p 5000:5000 --name registry registry
-docker pull drone/drone:0.5
-docker tag drone/drone:0.5 registry:5000/drone
-docker push registry:5000/drone
-EOF
-

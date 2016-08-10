@@ -1,0 +1,40 @@
+#!/bin/bash
+
+MASTER=$1
+MASTER_HOST=$2
+REGISTRY=$3
+REGISTRY_TAG=$4
+CERT_FILE=$5
+CERT_DIR=$6
+CERT_KEY=$REGISTRY.key
+
+sudo sh -c "echo $MASTER	$REGISTRY >>/etc/hosts"
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $CERT_KEY -out $CERT_FILE <<END_CERT
+.
+.
+.
+.
+.
+$REGISTRY
+.
+END_CERT
+sudo mkdir -p $CERT_DIR
+sudo cp $CERT_FILE $CERT_DIR
+
+cat >Dockerfile <<END_DOCKER
+FROM registry
+RUN mkdir /certs
+ADD $CERT_KEY /certs
+ADD $CERT_FILE /certs
+RUN chmod 444 /certs/*
+ENV REGISTRY_HTTP_TLS_CERTIFICATE=/certs/$CERT_FILE
+ENV REGISTRY_HTTP_TLS_KEY=/certs/$CERT_KEY
+END_DOCKER
+docker build -t $REGISTRY .
+
+sudo service docker restart
+docker service create -p 5000:5000 --name $REGISTRY --constraint node.hostname=="$MASTER_HOST" $REGISTRY
+
+
+
