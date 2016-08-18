@@ -1,0 +1,11 @@
+#!/bin/bash
+
+CLUSTER=$1
+MASTER_HOST=$2
+
+export REGISTRY=$CLUSTER-registry
+export REGISTRY_PORT=5000
+export REGISTRY_TAG=$MASTER_HOST:$REGISTRY_PORT
+
+docker service create -p $REGISTRY_PORT:$REGISTRY_PORT --name $REGISTRY --constraint node.hostname=="$MASTER_HOST" registry
+

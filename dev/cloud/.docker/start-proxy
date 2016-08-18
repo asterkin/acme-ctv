@@ -1,0 +1,18 @@
+#!/bin/bash
+
+CLUSTER=$1
+MASTER_HOST=$2
+
+export PROXY=$CLUSTER-proxy
+
+docker network create --driver overlay $PROXY
+docker service create --name $PROXY           \
+	-p 80:80                              \
+	-p 443:443                            \
+	-p 8080:8080			      \
+	--network $PROXY                      \
+	--constraint node.hostname=="$MASTER_HOST" \
+	-e MODE=swarm                         \
+	vfarcic/docker-flow-proxy
+
+

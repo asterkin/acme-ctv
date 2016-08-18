@@ -1,0 +1,7 @@
+#!/bin/bash
+
+SUBJECT=\'/CN=$1/subjectAltName=DNS.1=localhost\'
+sudo openssl req -new -key /var/lib/docker/swarm/certificates/swarm-node.key -subj $SUBJECT -out docker-server.csr
+sudo openssl x509 -req -days 365 -in docker-server.csr -CA /var/lib/docker/swarm/certificates/swarm-root-ca.crt -CAkey /var/lib/docker/swarm/certificates/swarm-root-ca.key -CAcreateserial -CAserial /var/lib/docker/swarm/certificates/swarm-root-ca.seq -out /var/lib/docker/swarm/certificates/docker-server.crt
+
+

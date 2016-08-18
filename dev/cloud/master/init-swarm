@@ -1,11 +1,11 @@
 #!/bin/bash
 
-export MASTER=$1
-export HOSTNAME=$2
+MASTER=$1
+HOSTNAME=$2
+REGISTRY=$3
 
 sudo hostnamectl set-hostname $HOSTNAME
 sudo service docker restart
-docker swarm init --advertise-addr $MASTER
 
 
 

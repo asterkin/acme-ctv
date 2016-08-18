@@ -1,4 +1,0 @@
-#!/bin/bash
-
-ssh -q cloud-user@$BASTION "bash -s $MASTER_HOST" <master/start-proxy
-

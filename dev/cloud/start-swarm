@@ -5,38 +5,31 @@ KEY_FILE=$CLUSTER.pem
 export BASTION=$2
 export MASTER=$3
 export MASTER_HOST=$CLUSTER-master
+export DOCKER_PORT=2375
+
 shift 3
 
-rm -f ~/.ssh/*
-cat >~/.ssh/config <<EOF
-Host $BASTION
-	ForwardAgent yes
-	StrictHostKeyChecking no
-	UserKnownHostsFile=/dev/null
-	IdentityFile ~/.ssh/$KEY_FILE
-EOF
-cp ~/Downloads/$KEY_FILE ~/.ssh
-chmod 600 ~/.ssh/*
+.ssh/config-bastion $KEY_FILE $BASTION 
 
-ssh -q cloud-user@$BASTION "bash -s $MASTER $MASTER_HOST" <master/init-swarm >/tmp/out
-JOIN=`grep -A 4 "To add a worker" /tmp/out | tail -4 | tr -d '\\\\' | tr -s ' ' | tr -d '\r' | tr -d '\n'`
+ssh -q cloud-user@$BASTION "bash -s $MASTER $DOCKER_PORT $MASTER_HOST $REGISTRY_TAG $MASTER_HOST" <.docker/config-node
+export JOIN=$(.docker/init-master $MASTER $DOCKER_PORT)
 
 i=1
 for SLAVE in "$@";
 do
-  cat >>~/.ssh/config <<EOF
-Host $SLAVE
-	StrictHostKeyChecking no
-	UserKnownHostsFile=/dev/null
-	IdentityFile ~/.ssh/$KEY_FILE
-	ProxyCommand ssh -q cloud-user@$BASTION -W %h:%p	
-EOF
+  .ssh/config-slave $KEY_FILE $BASTION $SLAVE
+
   HOSTNAME=$(printf "%s-slave%d" $CLUSTER $i)
-  ssh -q cloud-user@$SLAVE "bash -s $HOSTNAME $JOIN" <slave/join-swarm
+  ssh -q cloud-user@$SLAVE "bash -s $MASTER $DOCKER_PORT $MASTER_HOST $REGISTRY_HOST $REGISTRY_TAG $HOSTNAME" <.docker/config-node
+  DOCKER_HOST="tcp://$SLAVE:$DOCKER_PORT" $JOIN
   let i=$i+1	
 done
 
-ssh -q cloud-user@$BASTION docker node ls
+.docker/start-registry $CLUSTER $MASTER_HOST
+.docker/start-proxy $CLUSTER $MASTER_HOST
 
+docker node ls
+docker network ls
+docker service ls
 
 
