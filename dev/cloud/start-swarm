@@ -5,14 +5,21 @@ KEY_FILE=$CLUSTER.pem
 export BASTION=$2
 export MASTER=$3
 export MASTER_HOST=$CLUSTER-master
+export DOCKER_HOST="tcp://$MASTER:$DOCKER_PORT" 
 export DOCKER_PORT=2375
+export SOCKS_PORT=8123
+export ALL_PROXY=socks5://localhost:$SOCKS_PORT
+export all_proxy=socks5://localhost:$SOCKS_PORT
+export REGISTRY=$CLUSTER-registry
+export REGISTRY_PORT=5000
+export REGISTRY_TAG=$MASTER_HOST:$REGISTRY_PORT
+export PROXY=$CLUSTER-proxy
 
 shift 3
 
-.ssh/config-bastion $KEY_FILE $BASTION 
-
+.ssh/config-bastion $KEY_FILE $BASTION $SOCKS_PORT
 ssh -q cloud-user@$BASTION "bash -s $MASTER $DOCKER_PORT $MASTER_HOST $REGISTRY_TAG $MASTER_HOST" <.docker/config-node
-export JOIN=$(.docker/init-master $MASTER $DOCKER_PORT)
+export JOIN=$(.docker/init-master $MASTER)
 
 i=1
 for SLAVE in "$@";
@@ -25,8 +32,8 @@ do
   let i=$i+1	
 done
 
-.docker/start-registry $CLUSTER $MASTER_HOST
-.docker/start-proxy $CLUSTER $MASTER_HOST
+.docker/start-registry $REGISTRY $REGISTRY_PORT $MASTER_HOST
+.docker/start-proxy $PROXY $MASTER_HOST
 
 docker node ls
 docker network ls
