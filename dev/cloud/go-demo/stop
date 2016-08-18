@@ -1,0 +1,7 @@
+#!/bin/bash
+
+.docker/unregister-service go-demo
+docker service rm go-demo
+docker service rm go-demo-db
+docker network rm go-demo
+

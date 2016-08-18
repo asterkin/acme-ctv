@@ -13,7 +13,8 @@ export all_proxy=socks5://localhost:$SOCKS_PORT
 export REGISTRY=$CLUSTER-registry
 export REGISTRY_PORT=5000
 export REGISTRY_TAG=$MASTER_HOST:$REGISTRY_PORT
-export PROXY=$CLUSTER-proxy
+export PROXY=proxy
+#$CLUSTER-proxy
 
 shift 3
 
@@ -33,7 +34,8 @@ do
 done
 
 .docker/start-registry $REGISTRY $REGISTRY_PORT $MASTER_HOST
-.docker/start-proxy $PROXY $MASTER_HOST
+.docker/start-proxy 
+#$PROXY $MASTER_HOST
 
 docker node ls
 docker network ls

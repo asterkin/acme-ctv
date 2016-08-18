@@ -1,0 +1,14 @@
+#!/bin/bash
+
+docker network create --driver overlay go-demo
+docker service create --name go-demo-db \
+	--network go-demo \
+	mongo
+docker service create --name go-demo \
+	-e DB=go-demo-db \
+	--network go-demo \
+	--network $PROXY \
+	vfarcic/go-demo
+echo Wait until go-demo service starts and invoke go-demo/register
+docker service ps go-demo
+

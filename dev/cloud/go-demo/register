@@ -1,0 +1,4 @@
+#!/bin/bash
+
+.docker/register-service go-demo demo 8080
+
