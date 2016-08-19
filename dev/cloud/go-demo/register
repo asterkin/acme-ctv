@@ -1,4 +1,4 @@
 #!/bin/bash
 
-.docker/register-service go-demo demo 8080
+.docker/proxy/register go-demo demo 8080
 

@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#PROXY=$1
-#MASTER_HOST=$2
+export PROXY=$CLUSTER-proxy
 
 docker network create --driver overlay $PROXY
 docker service create --name $PROXY           \

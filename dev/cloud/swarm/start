@@ -1,0 +1,28 @@
+#!/bin/bash
+
+source .ssh/bastion/configure $1 $2
+source .ssh/proxy/start
+source .docker/master/configure $3
+source .docker/registry/configure
+.docker/node/configure $BASTION $MASTER_HOST
+source .docker/master/init
+
+shift 3
+
+i=1
+for SLAVE in "$@";
+do
+  .ssh/slave/configure $SLAVE
+  .docker/node/configure $SLAVE $(printf "%s-slave%d" $CLUSTER $i)
+  .docker/slave/join $SLAVE
+  let i=$i+1	
+done
+
+.docker/registry/start
+source .docker/proxy/start 
+
+docker node ls
+docker network ls
+docker service ls
+
+

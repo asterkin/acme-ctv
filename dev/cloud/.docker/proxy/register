@@ -1,0 +1,4 @@
+#!/bin/bash
+
+curl "$BASTION:8080/v1/docker-flow-proxy/reconfigure?serviceName=$1&servicePath=/$2&port=$3"
+

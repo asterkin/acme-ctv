@@ -1,0 +1,4 @@
+#!/bin/bash
+
+DOCKER_HOST="tcp://$1:$DOCKER_PORT" $JOIN
+

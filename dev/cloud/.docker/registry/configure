@@ -1,0 +1,7 @@
+#!/bin/bash
+
+
+export REGISTRY=$CLUSTER-registry
+export REGISTRY_PORT=5000
+export REGISTRY_TAG=$MASTER_HOST:$REGISTRY_PORT
+

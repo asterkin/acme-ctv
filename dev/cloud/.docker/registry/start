@@ -1,8 +1,4 @@
 #!/bin/bash
 
-REGISTRY=$1
-REGISTRY_PORT=$2
-MASTER_HOST=$3
-
 docker service create -p $REGISTRY_PORT:$REGISTRY_PORT --name $REGISTRY --constraint node.hostname=="$MASTER_HOST" registry
 

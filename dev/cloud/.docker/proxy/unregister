@@ -1,0 +1,5 @@
+#!/bin/bash
+
+curl "$BASTION:8080/v1/docker-flow-proxy/remove?serviceName=$1"
+
+
