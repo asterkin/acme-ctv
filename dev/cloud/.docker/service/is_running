@@ -1,0 +1,6 @@
+#!/bin/bash
+
+return $(docker service ls | grep test-proxy | tr -s ' ' | cut -d ' ' -f 3 | sed "s/\([0..9]*\)\/.*/\1/")
+
+
+

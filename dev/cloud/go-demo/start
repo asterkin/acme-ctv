@@ -9,6 +9,6 @@ docker service create --name go-demo \
 	--network go-demo \
 	--network $PROXY \
 	vfarcic/go-demo
-echo Wait until go-demo service starts and invoke go-demo/register
-docker service ps go-demo
+
+go-demo/register
 
