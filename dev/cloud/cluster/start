@@ -1,0 +1,17 @@
+#!/bin/bash
+
+export CLUSTER=$1
+source cluster/client/start $2
+source cluster/master/start $3
+shift 3
+
+for SLAVE in "$@";
+do
+  cluster/slave/start $SLAVE $i
+  let i=$i+1	
+done
+docker node ls
+
+source cluster/services/start
+
+

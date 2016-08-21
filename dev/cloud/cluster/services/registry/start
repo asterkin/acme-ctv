@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ -n $REGISTRY ];then
+  source cluster/services/registry/configure
+fi
+docker service create -p $REGISTRY_PORT:$REGISTRY_PORT --name $REGISTRY --constraint node.hostname=="$MASTER_HOST" registry
+cluster/services/proxy/register $REGISTRY registry $REGISTRY_PORT
+
+

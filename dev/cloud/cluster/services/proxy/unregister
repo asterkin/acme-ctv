@@ -1,0 +1,5 @@
+#!/bin/bash
+
+curl "$PROXY_ENDPOINT/remove?serviceName=$1"
+
+

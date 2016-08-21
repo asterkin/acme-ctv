@@ -1,0 +1,9 @@
+#!/bin/bash
+
+SLAVE=$1
+I=$2
+
+cluster/.ssh/slave/configure $SLAVE
+cluster/node/configure $SLAVE $(printf "%s-slave%d" $CLUSTER $i)
+cluster/master/join-slave $SLAVE
+

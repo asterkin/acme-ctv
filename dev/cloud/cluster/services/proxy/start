@@ -1,0 +1,15 @@
+#!/bin/bash
+
+export PROXY=$CLUSTER-proxy
+export PROXY_ENDPOINT="$MASTER:8080/v1/docker-flow-proxy"
+
+docker network create --driver overlay $PROXY
+docker service create --name $PROXY           \
+	-p 80:80                              \
+	-p 443:443                            \
+	-p 8080:8080			      \
+	--network $PROXY                      \
+	-e MODE=swarm                         \
+	vfarcic/docker-flow-proxy
+
+

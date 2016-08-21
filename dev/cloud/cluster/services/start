@@ -1,0 +1,9 @@
+#!/bin/bash
+
+source cluster/services/proxy/start
+cluster/services/registry/start
+
+docker network ls
+docker service ls
+
+

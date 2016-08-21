@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export MASTER=$1
+export MASTER_HOST=$CLUSTER-master
+export DOCKER_PORT=2375
+export DOCKER_HOST="tcp://$MASTER:$DOCKER_PORT" 
+
+#TODO: remove when start using secure registry
+source cluster/services/registry/configure
+#
+cluster/node/configure $MASTER $MASTER_HOST
+source cluster/master/init
+

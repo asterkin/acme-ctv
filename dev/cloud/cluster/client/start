@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source cluster/.ssh/bastion/configure $1
+source cluster/.ssh/proxy/start
+

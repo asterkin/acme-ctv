@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ -n $MASTER ]; then
+  export MASTER=$(hostname -I | cut -d ' ' -f 1)
+fi
+
+export MASTER_JOIN_SLAVE=$(docker swarm init --advertise-addr $MASTER | grep -A 4 "To add a worker" | tail -4 | tr -d '\\\\' | tr -s ' ' | tr -d '\r' | tr -d '\n')
+
+
+

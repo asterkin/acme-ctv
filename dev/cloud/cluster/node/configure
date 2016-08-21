@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ssh -q cloud-user@$1 "bash -s" <<EOF
+sudo hostnamectl set-hostname $2
+sudo sh -c "echo $MASTER $MASTER_HOST >>/etc/hosts"
+
+sudo sed -e "s/ExecStart=.*/ExecStart=\/usr\/bin\/dockerd -H tcp:\/\/0.0.0.0:$DOCKER_PORT --insecure-registry=$REGISTRY_TAG/" -i /usr/lib/systemd/system/docker.service
+
+sudo systemctl --system daemon-reload
+sudo service docker restart
+EOF
+
